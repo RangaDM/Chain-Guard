@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-b5b1323b9e237c4be0231cbc022a9931b01cf7c6",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/ImageRegistry.sol": "project/contracts/ImageRegistry.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/ImageRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.19;\n\ncontract ImageRegistry {\n    // Event to notify the world when a new image is added\n    event ImageRegistered(string imageName, string imageHash, address owner);\n\n    // Mapping: ImageName -> ImageHash\n    mapping(string => string) private imageHashes;\n    // Mapping: ImageName -> Owner Address (Who uploaded it)\n    mapping(string => address) private imageOwners;\n\n    // Function 1: Register an Image (Write to Blockchain)\n    function registerImage(string memory _name, string memory _hash) public {\n        // Check if image already exists\n        require(bytes(imageHashes[_name]).length == 0, \"Image already registered!\");\n\n        imageHashes[_name] = _hash;\n        imageOwners[_name] = msg.sender; // msg.sender is the wallet calling this function\n\n        emit ImageRegistered(_name, _hash, msg.sender);\n    }\n\n    // Function 2: Verify an Image (Read from Blockchain)\n    function verifyImage(string memory _name) public view returns (string memory, address) {\n        return (imageHashes[_name], imageOwners[_name]);\n    }\n}\n"
+      }
+    }
+  }
+}
